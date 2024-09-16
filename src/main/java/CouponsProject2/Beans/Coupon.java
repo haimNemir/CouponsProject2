@@ -1,8 +1,7 @@
-package CouponsProject2.Services_Beans;
+package CouponsProject2.Beans;
 import CouponsProject2.Utils.Category;
 import jakarta.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "coupon")
@@ -10,8 +9,6 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
-    private int companyId;
     @Enumerated(EnumType.STRING)
     private Category category;
     private String title;
@@ -21,12 +18,14 @@ public class Coupon {
     private int amount;
     private double price;
     private String image;
+    @JoinColumn(name = "company_ID")// change the name of the column that connected between two tables
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Company company;
 
     public Coupon() {
     }
 
-    public Coupon(int companyId, Category category, String title, String description, Date startDate, Date endDate, int amount, double price, String image) {
-        this.companyId = companyId;
+    public Coupon(Category category, String title, String description, Date startDate, Date endDate, int amount, double price, String image, Company company) {
         this.category = category;
         this.title = title;
         this.description = description;
@@ -35,74 +34,19 @@ public class Coupon {
         this.amount = amount;
         this.price = price;
         this.image = image;
+        this.company = company;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getCompanyId() {
-        return companyId;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public String getImage() {
@@ -113,11 +57,66 @@ public class Coupon {
         this.image = image;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Coupon{" +
                 "id=" + id +
-                ", companyId=" + companyId +
                 ", category=" + category +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
@@ -126,6 +125,7 @@ public class Coupon {
                 ", amount=" + amount +
                 ", price=" + price +
                 ", image='" + image + '\'' +
+                ", company=" + company +
                 '}';
     }
 }

@@ -1,4 +1,4 @@
-package CouponsProject2.Services_Beans;
+package CouponsProject2.Beans;
 
 import jakarta.persistence.*;
 

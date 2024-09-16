@@ -1,7 +1,6 @@
-package CouponsProject2.Services_Beans;
+package CouponsProject2.Beans;
 
 import jakarta.persistence.*;
-import org.hibernate.sql.results.graph.Fetch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +11,12 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(unique = true)
     private String name;
     @Column(unique = true)
     private String email;
-    @Column(unique = true)
     private String password;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "companyId")//!!!!!!!!!!!!!לסכם
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "company")// mappedBy need to be the name of the variable that do the connection(Company -> company <- ) in the connected table (coupon),
     private ArrayList<Coupon> coupons;
 
     public Company() { // Empty constructor replacing the annotation @Autowired for the variables of the class
