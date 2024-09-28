@@ -1,6 +1,7 @@
 package CouponsProject2.Contollers;
 
 import CouponsProject2.Beans.Company;
+import CouponsProject2.Exceptions.AlreadyExistException;
 import CouponsProject2.Services.AdminService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,7 @@ public class AdminController {
     }
 
     @PostMapping("add-company")
-    public void addCompany(@RequestBody Company company) {
+    public void addCompany(@RequestBody Company company) throws AlreadyExistException {
         service.addCompany(company);
     }
 }

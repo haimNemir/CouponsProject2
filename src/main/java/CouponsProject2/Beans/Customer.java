@@ -16,12 +16,19 @@ public class Customer {
     private String email;
     private String password;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private ArrayList<Coupon> coupons;
+    private List<Coupon> coupons;
 
     public Customer() {
     }
 
-    public Customer(String firstName, String lastName, String email, String password, ArrayList<Coupon> coupons) {
+    public Customer(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Customer(String firstName, String lastName, String email, String password, List<Coupon> coupons) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -69,7 +76,7 @@ public class Customer {
         return coupons;
     }
 
-    public void setCoupons(ArrayList<Coupon> coupons) {
+    public void setCoupons(List<Coupon> coupons) {
         this.coupons = coupons;
     }
 

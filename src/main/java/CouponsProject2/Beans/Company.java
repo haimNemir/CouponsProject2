@@ -11,18 +11,22 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(unique = true)
     private String name;
-    @Column(unique = true)
     private String email;
     private String password;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "company")// mappedBy need to be the name of the variable that do the connection(Company -> company <- ) in the connected table (coupon),
-    private ArrayList<Coupon> coupons;
+    private List<Coupon> coupons;
 
     public Company() { // Empty constructor replacing the annotation @Autowired for the variables of the class
     }
 
-    public Company(String name, String email, String password, ArrayList<Coupon> coupons) {
+    public Company(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Company(String name, String email, String password, List<Coupon> coupons) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -61,7 +65,7 @@ public class Company {
         return coupons;
     }
 
-    public void setCoupons(ArrayList<Coupon> coupons) {
+    public void setCoupons(List<Coupon> coupons) {
         this.coupons = coupons;
     }
 
