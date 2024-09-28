@@ -11,6 +11,7 @@ public class Coupon {
     private int id;
     @Enumerated(EnumType.STRING)
     private Category category;
+    @Column(unique = true)
     private String title;
     private String description;
     private Date startDate;

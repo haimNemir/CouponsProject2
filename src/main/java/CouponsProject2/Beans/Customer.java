@@ -1,8 +1,5 @@
 package CouponsProject2.Beans;
-
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,6 +10,7 @@ public class Customer {
     private int id;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
     private String password;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

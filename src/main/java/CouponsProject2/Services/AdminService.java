@@ -1,15 +1,11 @@
 package CouponsProject2.Services;
-
 import CouponsProject2.Beans.Company;
 import CouponsProject2.Beans.Customer;
 import CouponsProject2.Exceptions.AlreadyExistException;
 import CouponsProject2.Exceptions.NotExistException;
 import CouponsProject2.Repositories.CompanyRepository;
-import CouponsProject2.Repositories.CouponRepository;
 import CouponsProject2.Repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -17,12 +13,10 @@ import java.util.Objects;
 public class AdminService {
     private final CompanyRepository companyRepository;
     private final CustomerRepository customerRepository;
-    private CouponRepository couponRepository;
 
-    public AdminService(CompanyRepository companyRepository, CustomerRepository customerRepository, CouponRepository couponRepository) {
+    public AdminService(CompanyRepository companyRepository, CustomerRepository customerRepository) {
         this.companyRepository = companyRepository;
         this.customerRepository = customerRepository;
-        this.couponRepository = couponRepository;
     }
 
     public boolean login(String email, String password) {
@@ -70,8 +64,6 @@ public class AdminService {
 
     /**
      * add new customer to the DB if there is no such customer with this email over there
-     * @param customer
-     * @throws
      */
     public void addCustomer(Customer customer) throws AlreadyExistException {
         if (customerRepository.existsByEmail(customer.getEmail()))
