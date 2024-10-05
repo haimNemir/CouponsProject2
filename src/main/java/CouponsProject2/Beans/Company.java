@@ -16,7 +16,7 @@ public class Company {
     @Column(unique = true)
     private String email;
     private String password;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "company")// mappedBy need to be the name of the variable that do the connection(Company -> company <- ) in the connected table (coupon),
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "company")// mappedBy need to be the name of the variable that do the connection(Company -> company <- ) in the connected table (coupon),
     private List<Coupon> coupons;
 
     public Company() { // Empty constructor replacing the annotation @Autowired for the variables of the class
@@ -78,7 +78,6 @@ public class Company {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", coupons=" + coupons +
                 '}';
     }
 }

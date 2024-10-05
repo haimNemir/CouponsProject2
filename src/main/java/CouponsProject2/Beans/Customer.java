@@ -13,7 +13,8 @@ public class Customer {
     @Column(unique = true)
     private String email;
     private String password;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @Column(unique = true)
     private List<Coupon> coupons;
 
     public Customer() {

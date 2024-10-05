@@ -20,7 +20,7 @@ public class Coupon {
     private double price;
     private String image;
     @JoinColumn(name = "company_id")// change the name of the column that connected between two tables, in phase 1 it was named like this too.
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Company company;
 
     public Coupon() {

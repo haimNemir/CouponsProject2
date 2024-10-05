@@ -1,4 +1,5 @@
 package CouponsProject2.Services;
+import CouponsProject2.Beans.Company;
 import CouponsProject2.Beans.Coupon;
 import CouponsProject2.Exceptions.AlreadyExistException;
 import CouponsProject2.Exceptions.NotExistException;
@@ -22,8 +23,11 @@ public class CompanyService {
     }
 
     public boolean login(String email, String password) throws NotExistException {
-        if (companyRepository.existsByEmailAndPassword(email, password))
+        Company company = companyRepository.findByEmailAndPassword(email, password);
+        if (company != null){
+            companyId = company.getId();
             return true;
+        }
         throw new NotExistException("The email or the password is not correct");
     }
 
@@ -31,6 +35,10 @@ public class CompanyService {
         if (couponRepository.existsByTitle(coupon.getTitle()))
             throw new AlreadyExistException("The coupon title already exist");
         couponRepository.save(coupon);
+    }
+
+    public Coupon getOneCoupon(int couponId) throws NotExistException {// this method do not upear in the instructions
+        return couponRepository.findById(couponId).orElseThrow(() -> new NotExistException("coupon dose not exist"));
     }
 
 }
