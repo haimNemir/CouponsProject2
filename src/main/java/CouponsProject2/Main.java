@@ -34,15 +34,16 @@ public class Main {
 //       TODO: add documentation to the app(Java Docs).
 //       TODO: if you have for loop in Collections, use "Predicate" only!
 //       TODO: check if the login method in the service layer is redundant.
-//       TODO: Change in table coupons_customer to the option to have 2 coupons to one customer.
 //       TODO: fix purchaseCoupon(Need to save a customer with his updated list of coupons) and login methods in customerService
 //       TODO: try do convert the Service layer to design pattern "builder" and you will can connect only to method login and he will return the rest of class methods
-//      //Admin service-
+//       TODO: print conditions with ternary  and lambda and double lambda!
+//       TODO: use in the value return of function to do there conditions like: return isWeekend && isMorning;
+//      Admin service-
 //      //login- good
 //        System.out.println(adminService.login("admin@admin.com","admin"));
 
 //		//Add company - good
-//      adminService.addCompany(new Company("non3", "non@nonn3", "12346", null));
+//      adminService.addCompany(new Company("non4", "non@nonn4", "2222"));
 
 //      //Get one Company - good
 //        Company company2 = adminService.getOneCompany(1);
@@ -57,7 +58,7 @@ public class Main {
 //      //Get all companies - good
 //        System.out.println(adminService.getAllCompanies());
 //      // Add customer - good
-//        adminService.addCustomer(new Customer("ron", "cohen", "ron@gmail.comm", "2222"));
+//        adminService.addCustomer(new Customer("ron", "cohen", "ron@gmail.com", "1111"));
 //      // update customer - good
 //        Customer customer = adminService.getOneCustomer(2);
 //        customer.setFirstName("avraham");
@@ -71,13 +72,28 @@ public class Main {
 
 //      //Company service:
 //      //login - good
-//        System.out.println(companyService.login("non@nonn3", "12346"));
+//        System.out.println(companyService.login("non@nonn3", "123461"));
 //      //Add coupon - good
 //        companyService.addCoupon(new Coupon(Category.SPA, "massage", "10 alloy as mental therapy", Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
-
-
-
-
+//      //Update coupon- good
+//        Coupon coupon = companyService.getOneCoupon(1);
+//        coupon.setCategory(Category.CINEMA);
+//        coupon.setCompany(adminService.getOneCompany(2));
+//        companyService.updateCoupon(coupon);
+//      //Delete coupon- not working ! ask nir why I have a foreign key fail if I have cascade.REMOVE
+//        System.out.println(companyService.deleteCoupon(1));
+        //Get company coupons - good
+//        companyService.login("non@nonn2", "1111");
+//        System.out.println(companyService.getCompanyCoupons());
+//      //Get company coupon by category - good
+//        companyService.login("non@nonn2", "1111");
+//        System.out.println(companyService.getCompanyCoupons(Category.SPA));
+//      //Get company coupon by max price - good
+//        companyService.login("non@nonn2", "1111");
+//        System.out.println(companyService.getCompanyCoupons(1500));
+//      //Get company details - good
+//        companyService.login("non@nonn2", "1111");
+//        System.out.println(companyService.getCompanyDetails());
 
 
 
@@ -88,6 +104,9 @@ public class Main {
 //      //purchase coupon - good!!
 //        customerService.login("ron@gmail.com","1111");
 //        customerService.purchaseCoupon(companyService.getOneCoupon(1));
+
+
+
 
     }
 }

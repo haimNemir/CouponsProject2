@@ -13,8 +13,8 @@ public class Customer {
     @Column(unique = true)
     private String email;
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @Column(unique = true)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE) //TODO: check if when we delete customer its deleted his coupons and you can add cascade.REMOVE or the all types of the coupon he is holding, and also other customers will lose they coupons and you need to keep the cascade on PERSIST
+    @Column(unique = true)// for prevent from customer purchase two coupons from same type, cant do it in another way because we don't have control on the logic in table customers_coupons
     private List<Coupon> coupons;
 
     public Customer() {

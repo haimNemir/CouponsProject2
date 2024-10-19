@@ -11,7 +11,6 @@ public class Coupon {
     private int id;
     @Enumerated(EnumType.STRING)
     private Category category;
-    @Column(unique = true)
     private String title;
     private String description;
     private Date startDate;
@@ -20,7 +19,7 @@ public class Coupon {
     private double price;
     private String image;
     @JoinColumn(name = "company_id")// change the name of the column that connected between two tables, in phase 1 it was named like this too.
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER)// its not make sense to add cascade.REMOVE here because we dont want when we delete coupon to delete with it the company
     private Company company;
 
     public Coupon() {
