@@ -1,5 +1,7 @@
 package CouponsProject2.Beans;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -71,8 +73,8 @@ public class Customer {
         this.password = password;
     }
 
-    public List<Coupon> getCoupons() {
-        return coupons;
+    public ArrayList<Coupon> getCoupons() {
+        return new ArrayList<>(coupons);
     }
 
     public void setCoupons(List<Coupon> coupons) {

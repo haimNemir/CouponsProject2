@@ -16,20 +16,18 @@ import java.util.*;
 @Service
 public class CompanyService {
     private final CompanyRepository companyRepository;
-    private final CustomerRepository customerRepository;
     private final CouponRepository couponRepository;
-    private Company connectedCompany;
+    private int companyId;
 
-    public CompanyService(CompanyRepository companyRepository, CustomerRepository customerRepository, CouponRepository couponRepository) {
+    public CompanyService(CompanyRepository companyRepository, CouponRepository couponRepository) {
         this.companyRepository = companyRepository;
-        this.customerRepository = customerRepository;
         this.couponRepository = couponRepository;
     }
 
     public boolean login(String email, String password) throws NotExistException {
         Company company = companyRepository.findByEmailAndPassword(email, password);
         if (company != null) {
-            connectedCompany = company;
+            companyId = company.getId();
             return true;
         }
         throw new NotExistException("The email or the password is not correct");
@@ -37,7 +35,6 @@ public class CompanyService {
 
     /**
      *
-     * @param coupon
      * @throws AlreadyExistException if the title of the coupon already exist in other coupon of !!!this!!! company
      */
     public void addCoupon(Coupon coupon) throws AlreadyExistException, NotExistException {
@@ -72,18 +69,18 @@ public class CompanyService {
     }
 
     public ArrayList<Coupon> getCompanyCoupons() {
-        return new ArrayList<>(couponRepository.findCouponsByCompanyId(connectedCompany.getId()));
+        return new ArrayList<>(couponRepository.findCouponsByCompanyId(companyId));
     }
 
     public ArrayList<Coupon> getCompanyCoupons(Category category) {
-        return new ArrayList<>(couponRepository.findCouponsByCompanyIdAndCategory(connectedCompany.getId(), category));
+        return new ArrayList<>(couponRepository.findCouponsByCompanyIdAndCategory(companyId, category));
     }
 
     public ArrayList<Coupon> getCompanyCoupons(double maxPrice) {
-        return new ArrayList<>(couponRepository.findCouponsByCompanyIdAndPriceLessThan(connectedCompany.getId(), maxPrice));
+        return new ArrayList<>(couponRepository.findCouponsByCompanyIdAndPriceLessThan(companyId, maxPrice));
     }
 
     public Company getCompanyDetails(){
-        return connectedCompany;
+        return companyRepository.findById(companyId).orElseThrow();
     }
 }

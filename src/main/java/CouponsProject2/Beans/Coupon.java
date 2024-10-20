@@ -125,7 +125,7 @@ public class Coupon {
                 ", amount=" + amount +
                 ", price=" + price +
                 ", image='" + image + '\'' +
-                ", company=" + company +
+                ", company name= " + company.getName() +
                 '}';
     }
 }

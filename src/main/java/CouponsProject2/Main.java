@@ -38,6 +38,9 @@ public class Main {
 //       TODO: try do convert the Service layer to design pattern "builder" and you will can connect only to method login and he will return the rest of class methods
 //       TODO: print conditions with ternary  and lambda and double lambda!
 //       TODO: use in the value return of function to do there conditions like: return isWeekend && isMorning;
+//       TODO: CustomerService.purchaseCoupons - do with stream().
+//       TODO: on service layer think about change the access to methods only after entered with login method by that he will return CustomerService/CompanyService and the rest of the methods will be privates
+//       TODO: in the end: delete redundant imports.
 //      Admin service-
 //      //login- good
 //        System.out.println(adminService.login("admin@admin.com","admin"));
@@ -101,12 +104,29 @@ public class Main {
 
 
 //      //Customer service:
+//      //Login - good
+//        System.out.println(customerService.login("ron@gmail.com","1111"));
+
 //      //purchase coupon - good!!
-//        customerService.login("ron@gmail.com","1111");
+//        System.out.println(customerService.login("ron@gmail.com","1111"));
 //        customerService.purchaseCoupon(companyService.getOneCoupon(1));
 
+        //Get customer coupons - good
+//        System.out.println(customerService.login("ron@gmail.com","1111"));
+//        System.out.println(customerService.getCustomerCoupons());
 
+        //Get customer coupons by category - good
+//        System.out.println(customerService.login("ron@gmail.com","1111"));
+//        System.out.println(customerService.getCustomerCoupons(Category.SPA));
 
+        //Get customer coupons by category - good
+//        System.out.println(customerService.login("ron@gmail.com","1111"));
+//        System.out.println(customerService.getCustomerCoupons(1450));
+//        System.out.println(customerService.getCustomerCoupons(1550));
+
+//      //Get customer details - good
+//        System.out.println(customerService.login("ron@gmail.com","1111"));
+//        System.out.println(customerService.getCustomerDetails());
 
     }
 }
