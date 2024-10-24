@@ -1,8 +1,7 @@
 package CouponsProject2.Beans;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "customer")
@@ -15,9 +14,9 @@ public class Customer {
     @Column(unique = true)
     private String email;
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE) //TODO: check if when we delete customer its deleted his coupons and you can add cascade.REMOVE or the all types of the coupon he is holding, and also other customers will lose they coupons and you need to keep the cascade on PERSIST
     @Column(unique = true)// for prevent from customer purchase two coupons from same type, cant do it in another way because we don't have control on the logic in table customers_coupons
-    private List<Coupon> coupons;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private Set<Coupon> coupons = new HashSet<>();
 
     public Customer() {
     }
@@ -29,7 +28,7 @@ public class Customer {
         this.password = password;
     }
 
-    public Customer(String firstName, String lastName, String email, String password, List<Coupon> coupons) {
+    public Customer(String firstName, String lastName, String email, String password, Set<Coupon> coupons) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -73,11 +72,11 @@ public class Customer {
         this.password = password;
     }
 
-    public ArrayList<Coupon> getCoupons() {
-        return new ArrayList<>(coupons);
+    public Set<Coupon> getCoupons() {
+        return coupons;
     }
 
-    public void setCoupons(List<Coupon> coupons) {
+    public void setCoupons(Set<Coupon> coupons) {
         this.coupons = coupons;
     }
 

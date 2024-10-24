@@ -1,4 +1,4 @@
-package CouponsProject2.Services;
+package CouponsProject2.Utils;
 
 public interface ClientService {
 

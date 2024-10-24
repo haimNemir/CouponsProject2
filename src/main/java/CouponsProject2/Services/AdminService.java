@@ -1,28 +1,29 @@
 package CouponsProject2.Services;
 import CouponsProject2.Beans.Company;
-import CouponsProject2.Beans.Coupon;
 import CouponsProject2.Beans.Customer;
 import CouponsProject2.Exceptions.AlreadyExistException;
 import CouponsProject2.Exceptions.NotExistException;
 import CouponsProject2.Repositories.CompanyRepository;
 import CouponsProject2.Repositories.CouponRepository;
 import CouponsProject2.Repositories.CustomerRepository;
+import CouponsProject2.Utils.ClientService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Objects;
 
 @Service
-public class AdminService implements ClientService{
+public class AdminService implements ClientService {
     private final CompanyRepository companyRepository;
     private final CustomerRepository customerRepository;
     private final CouponRepository couponRepository;
+    private final CompanyService companyService;
 
-    public AdminService(CompanyRepository companyRepository, CustomerRepository customerRepository, CouponRepository couponRepository) {
+    public AdminService(CompanyRepository companyRepository, CustomerRepository customerRepository, CouponRepository couponRepository, CompanyService companyService) {
         this.companyRepository = companyRepository;
         this.customerRepository = customerRepository;
         this.couponRepository = couponRepository;
+        this.companyService = companyService;
     }
 
     public boolean login(String email, String password) throws NotExistException {
@@ -54,10 +55,13 @@ public class AdminService implements ClientService{
         companyRepository.save(company);
     }
 
-    public void deleteCompany(int companyId) throws NotExistException {
-        if (companyRepository.existsById(companyId))
+    public boolean deleteCompany(int companyId) throws NotExistException {
+        if (companyRepository.existsById(companyId)) {
+            companyService.getCompanyCoupons();
             companyRepository.deleteById(companyId);
-        else throw new NotExistException("This company does not exist");
+            return true;
+        }
+        throw new NotExistException("This company does not exist");
     }
 
     public ArrayList<Company> getAllCompanies() throws NotExistException {
@@ -86,10 +90,12 @@ public class AdminService implements ClientService{
         else throw new NotExistException("the customer does not exist");
     }
 
-    public void deleteCustomer(int customerId) throws NotExistException {
-        if (customerRepository.existsById(customerId))
+    public boolean deleteCustomer(int customerId) throws NotExistException {
+        if (customerRepository.existsById(customerId)) {
             customerRepository.deleteById(customerId);
-        else throw new NotExistException("This customer does not exist");
+            return true;
+        }
+        throw new NotExistException("This customer does not exist");
     }
 
     public Customer getOneCustomer(int customerId) throws NotExistException {

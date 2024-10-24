@@ -7,13 +7,14 @@ import CouponsProject2.Exceptions.NotExistException;
 import CouponsProject2.Repositories.CompanyRepository;
 import CouponsProject2.Repositories.CouponRepository;
 import CouponsProject2.Utils.Category;
+import CouponsProject2.Utils.ClientService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 
 @Service
-public class CompanyService implements ClientService{
+public class CompanyService implements ClientService {
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private int companyId;

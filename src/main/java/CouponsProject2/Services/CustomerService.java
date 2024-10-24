@@ -9,13 +9,15 @@ import CouponsProject2.Exceptions.OutOfStockException;
 import CouponsProject2.Repositories.CouponRepository;
 import CouponsProject2.Repositories.CustomerRepository;
 import CouponsProject2.Utils.Category;
+import CouponsProject2.Utils.ClientService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 
 @Service
-public class CustomerService implements ClientService{
+public class CustomerService implements ClientService {
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
     private int customerId;
@@ -46,7 +48,7 @@ public class CustomerService implements ClientService{
             throw new ExpiredDateException("The expiration date is left!");
         }
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new NotExistException("We did not find a customer to purchase the coupon, please log in first"));
-        ArrayList<Coupon> coupons = getCustomerCoupons();
+        Set<Coupon> coupons = getCustomerCoupons();
         for (Coupon purchasedCoupon : coupons) {
             if (coupon.getId() == purchasedCoupon.getId())
                 throw new AlreadyExistException("This customer already purchased this coupon");
@@ -58,7 +60,7 @@ public class CustomerService implements ClientService{
         coupon1.setAmount(coupon1.getAmount() - 1);
     }
 
-    public ArrayList<Coupon> getCustomerCoupons() {
+    public Set<Coupon> getCustomerCoupons() {
         Customer connectedCustomer = customerRepository.findById(customerId).orElseThrow();
         return connectedCustomer.getCoupons();
     }

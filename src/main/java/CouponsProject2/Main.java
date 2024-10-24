@@ -1,5 +1,7 @@
 package CouponsProject2;
+import CouponsProject2.Beans.Company;
 import CouponsProject2.Beans.Coupon;
+import CouponsProject2.Beans.Customer;
 import CouponsProject2.Services.*;
 import CouponsProject2.Utils.Category;
 import CouponsProject2.Exceptions.AlreadyExistException;
@@ -11,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 @SpringBootApplication
@@ -28,14 +31,16 @@ public class Main {
 //       TODO: CustomerService.purchaseCoupons - do with stream().
 //       TODO: on service layer think about change the access to methods only after entered with login method by that he will return CustomerService/CompanyService and the rest of the methods will be privates
 //       TODO: in the end: delete redundant imports.
-
+//       TODO: check if when we delete customer its deleted his coupons and you can add cascade.REMOVE or the all types of the coupon he is holding, and also other customers will lose they coupons and you need to keep the cascade on PERSIST
         ApplicationContext context = SpringApplication.run(Main.class, args);
         AdminService adminService = context.getBean(AdminService.class);
         CompanyService companyService = context.getBean(CompanyService.class);
         CustomerService customerService = context.getBean(CustomerService.class);
+//        CouponExpirationDailyJob job = context.getBean(CouponExpirationDailyJob.class);
+//        job.run();
 
-        CouponExpirationDailyJob job = context.getBean(CouponExpirationDailyJob.class);
-        job.run();
+
+
 
 //      Admin service-
 //      //login- good
@@ -134,9 +139,30 @@ public class Main {
 //        CustomerService customerService1 = (CustomerService) loginManager1.login("ron@gmail.com","1111", ClientType.Customer);
 //        System.out.println(customerService1.getCustomerDetails());
 
+//        adminService.addCompany(new Company("non1", "non@nonn1", "1111"));
+//        adminService.addCompany(new Company("non2", "non@nonn2", "2222"));
+//        adminService.addCompany(new Company("non3", "non@nonn3", "3333"));
+//        adminService.addCompany(new Company("non4", "non@nonn4", "4444"));
+//        adminService.addCustomer(new Customer("ron1", "cohen", "ron@gmail.com1", "1111"));
+//        adminService.addCustomer(new Customer("ron2", "cohen", "ron@gmail.com2", "1111"));
+//        adminService.addCustomer(new Customer("ron3", "cohen", "ron@gmail.com3", "1111"));
+//        adminService.addCustomer(new Customer("ron4", "cohen", "ron@gmail.com4", "1111"));
+//        companyService.addCoupon(new Coupon(Category.SPA, "massage1", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+//        companyService.addCoupon(new Coupon(Category.SPA, "massage2", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+//        companyService.addCoupon(new Coupon(Category.SPA, "massage3", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+//        companyService.addCoupon(new Coupon(Category.SPA, "massage4", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+//        companyService.addCoupon(new Coupon(Category.SPA, "massage5", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+//        companyService.addCoupon(new Coupon(Category.SPA, "massage6", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+
+//        System.out.println(adminService.deleteCompany(1));
+
+//        System.out.println(companyService.deleteCoupon(1));
+//        System.out.println(adminService.deleteCustomer(1));
 
 
-    job.stop();
+
+
+//    job.stop();
 
     }
 }

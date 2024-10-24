@@ -2,6 +2,8 @@ package CouponsProject2.Beans;
 import CouponsProject2.Utils.Category;
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "coupon")
@@ -21,6 +23,9 @@ public class Coupon {
     @JoinColumn(name = "company_id")// change the name of the column that connected between two tables, in phase 1 it was named like this too.
     @ManyToOne(fetch = FetchType.EAGER)// its not make sense to add cascade.REMOVE here because we dont want when we delete coupon to delete with it the company
     private Company company;
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "coupons")
+    private final Set<Customer> customers = new HashSet<>();
+
 
     public Coupon() {
     }
