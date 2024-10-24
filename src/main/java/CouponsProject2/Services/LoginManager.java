@@ -1,39 +1,32 @@
-package Facades;
-import java.sql.SQLException;
+package CouponsProject2.Services;
+import CouponsProject2.Exceptions.NotExistException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LoginManager {
-    private static LoginManager instance;
+    private final AdminService adminService;
+    private final CompanyService companyService;
+    private final CustomerService customerService;
 
-    private LoginManager() {
+    private LoginManager(AdminService adminService, CompanyService companyService, CustomerService customerService) {
+        this.adminService = adminService;
+        this.companyService = companyService;
+        this.customerService = customerService;
     }
 
-    public static LoginManager getInstance(){
-        if (instance == null){
-            instance = new LoginManager();
-        }
-        return instance;
-    }
-
-    public ClientFacade login(String email, String password, ClientType clientType) throws SQLException, NotExistException {
+    public ClientService login(String email, String password, ClientType clientType) throws NotExistException {
         switch (clientType){
             case Administrator:
-                if (new AdminFacade().login(email,password)) {
-                    AdminFacade adminFacade = new AdminFacade();
-                    adminFacade.login(email,password);
-                    return adminFacade;
-                } else return null;
+                if (adminService.login(email,password))
+                    return adminService;
+                break;
             case Company:
-                if (new CompanyFacade().login(email,password)) {
-                    CompanyFacade companyFacade = new CompanyFacade();
-                    companyFacade.login(email, password);
-                    return companyFacade;
-                } else return null;
+                if (companyService.login(email,password))
+                    return companyService;
+                 break;
             case Customer:
-                if (new CustomerFacade().login(email,password)){
-                    CustomerFacade customerFacade = new CustomerFacade();
-                    customerFacade.login(email, password);
-                    return customerFacade;
-                } else return null;
+                if (customerService.login(email,password))
+                    return customerService;
         }
         return null;
     }

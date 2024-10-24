@@ -1,34 +1,21 @@
 package CouponsProject2;
-
-import CouponsProject2.Beans.Company;
 import CouponsProject2.Beans.Coupon;
-import CouponsProject2.Beans.Customer;
+import CouponsProject2.Services.*;
+import CouponsProject2.Utils.Category;
 import CouponsProject2.Exceptions.AlreadyExistException;
 import CouponsProject2.Exceptions.ExpiredDateException;
 import CouponsProject2.Exceptions.NotExistException;
 import CouponsProject2.Exceptions.OutOfStockException;
-import CouponsProject2.Services.AdminService;
-import CouponsProject2.Services.CompanyService;
-import CouponsProject2.Services.CustomerService;
-import CouponsProject2.Utils.Category;
+import CouponsProject2.Utils.CouponExpirationDailyJob;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
-import java.sql.Date;
-import java.text.DateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @SpringBootApplication
 public class Main {
     public static void main(String[] args) throws NotExistException, AlreadyExistException, OutOfStockException, ExpiredDateException {
-        ApplicationContext context = SpringApplication.run(Main.class, args);
-        AdminService adminService = context.getBean(AdminService.class);
-        CompanyService companyService = context.getBean(CompanyService.class);
-        CustomerService customerService = context.getBean(CustomerService.class);
-//        companyService.addCoupon(new Coupon(Category.CINEMA, "Movie", "65% off for IDF soldiers", Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1.0,null, company3));
-//        Customer customer2 = new Customer("David", "Bachar", "DavidB@gmail.com", "2222");
 //       TODO: check for all company service method if they are mach with the instructions.
 //		 TODO: in Test Class you need to open try catch with the throws.
 //       TODO: add documentation to the app(Java Docs).
@@ -41,6 +28,15 @@ public class Main {
 //       TODO: CustomerService.purchaseCoupons - do with stream().
 //       TODO: on service layer think about change the access to methods only after entered with login method by that he will return CustomerService/CompanyService and the rest of the methods will be privates
 //       TODO: in the end: delete redundant imports.
+
+        ApplicationContext context = SpringApplication.run(Main.class, args);
+        AdminService adminService = context.getBean(AdminService.class);
+        CompanyService companyService = context.getBean(CompanyService.class);
+        CustomerService customerService = context.getBean(CustomerService.class);
+
+        CouponExpirationDailyJob job = context.getBean(CouponExpirationDailyJob.class);
+        job.run();
+
 //      Admin service-
 //      //login- good
 //        System.out.println(adminService.login("admin@admin.com","admin"));
@@ -100,9 +96,6 @@ public class Main {
 
 
 
-
-
-
 //      //Customer service:
 //      //Login - good
 //        System.out.println(customerService.login("ron@gmail.com","1111"));
@@ -127,6 +120,23 @@ public class Main {
 //      //Get customer details - good
 //        System.out.println(customerService.login("ron@gmail.com","1111"));
 //        System.out.println(customerService.getCustomerDetails());
+
+
+
+//        Login manager - good
+//        LoginManager loginManager1 = context.getBean(LoginManager.class);
+////        AdminService adminService1= (AdminService) loginManager1.login("admin@admin.com","admin", ClientType.Administrator);
+////        System.out.println(adminService1.getOneCustomer(1));
+//
+//        CompanyService companyService1 = (CompanyService) loginManager1.login("non@nonn4","2222", ClientType.Company);
+//        System.out.println(companyService1.getCompanyDetails());
+
+//        CustomerService customerService1 = (CustomerService) loginManager1.login("ron@gmail.com","1111", ClientType.Customer);
+//        System.out.println(customerService1.getCustomerDetails());
+
+
+
+    job.stop();
 
     }
 }

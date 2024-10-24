@@ -1,26 +1,35 @@
 package CouponsProject2.Services;
 import CouponsProject2.Beans.Company;
+import CouponsProject2.Beans.Coupon;
 import CouponsProject2.Beans.Customer;
 import CouponsProject2.Exceptions.AlreadyExistException;
 import CouponsProject2.Exceptions.NotExistException;
 import CouponsProject2.Repositories.CompanyRepository;
+import CouponsProject2.Repositories.CouponRepository;
 import CouponsProject2.Repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 @Service
-public class AdminService {
+public class AdminService implements ClientService{
     private final CompanyRepository companyRepository;
     private final CustomerRepository customerRepository;
+    private final CouponRepository couponRepository;
 
-    public AdminService(CompanyRepository companyRepository, CustomerRepository customerRepository) {
+    public AdminService(CompanyRepository companyRepository, CustomerRepository customerRepository, CouponRepository couponRepository) {
         this.companyRepository = companyRepository;
         this.customerRepository = customerRepository;
+        this.couponRepository = couponRepository;
     }
 
-    public boolean login(String email, String password) {
-        return Objects.equals(email, "admin@admin.com") && Objects.equals(password, "admin");
+    public boolean login(String email, String password) throws NotExistException {
+        if (Objects.equals(email, "admin@admin.com") && Objects.equals(password, "admin")) {
+            return true;
+        }
+        throw new NotExistException("The email or the password is not correct");
     }
 
     /**
@@ -83,6 +92,10 @@ public class AdminService {
         else throw new NotExistException("This customer does not exist");
     }
 
+    public Customer getOneCustomer(int customerId) throws NotExistException {
+        return customerRepository.findById(customerId).orElseThrow(() -> new NotExistException("This customer does not exist"));
+    }
+
     public ArrayList<Customer> getAllCustomers() throws NotExistException {
         ArrayList<Customer> customers = (ArrayList<Customer>) customerRepository.findAll();
         if (!(customers.isEmpty()))
@@ -90,7 +103,6 @@ public class AdminService {
         else throw new NotExistException("There are no customers yet");
     }
 
-    public Customer getOneCustomer(int customerId) throws NotExistException {
-        return customerRepository.findById(customerId).orElseThrow(() -> new NotExistException("This customer does not exist"));
-    }
+
+
 }

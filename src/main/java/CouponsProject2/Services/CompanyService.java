@@ -6,7 +6,6 @@ import CouponsProject2.Exceptions.AlreadyExistException;
 import CouponsProject2.Exceptions.NotExistException;
 import CouponsProject2.Repositories.CompanyRepository;
 import CouponsProject2.Repositories.CouponRepository;
-import CouponsProject2.Repositories.CustomerRepository;
 import CouponsProject2.Utils.Category;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,7 @@ import java.util.*;
 
 
 @Service
-public class CompanyService {
+public class CompanyService implements ClientService{
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private int companyId;

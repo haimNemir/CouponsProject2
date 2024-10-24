@@ -6,7 +6,6 @@ import CouponsProject2.Exceptions.AlreadyExistException;
 import CouponsProject2.Exceptions.ExpiredDateException;
 import CouponsProject2.Exceptions.NotExistException;
 import CouponsProject2.Exceptions.OutOfStockException;
-import CouponsProject2.Repositories.CompanyRepository;
 import CouponsProject2.Repositories.CouponRepository;
 import CouponsProject2.Repositories.CustomerRepository;
 import CouponsProject2.Utils.Category;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Service
-public class CustomerService {
+public class CustomerService implements ClientService{
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
     private int customerId;
@@ -77,4 +76,8 @@ public class CustomerService {
     public Customer getCustomerDetails(){
         return customerRepository.findById(customerId).orElseThrow();
     }
+
+
+
+
 }
