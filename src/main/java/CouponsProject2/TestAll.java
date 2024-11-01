@@ -1,22 +1,172 @@
 package CouponsProject2;
 
-import org.springframework.stereotype.Service;
+import CouponsProject2.Beans.Company;
+import CouponsProject2.Beans.Coupon;
+import CouponsProject2.Beans.Customer;
+import CouponsProject2.Exceptions.AlreadyExistException;
+import CouponsProject2.Exceptions.ExpiredDateException;
+import CouponsProject2.Exceptions.NotExistException;
+import CouponsProject2.Exceptions.OutOfStockException;
+import CouponsProject2.Services.AdminService;
+import CouponsProject2.Services.CompanyService;
+import CouponsProject2.Services.CustomerService;
+import CouponsProject2.Utils.Category;
+import CouponsProject2.Utils.ClientType;
+import CouponsProject2.Utils.CouponExpirationDailyJob;
+import CouponsProject2.Utils.LoginManager;
+import org.springframework.stereotype.Component;
 
-@Service // for singleton
+import java.sql.Date;
+
+@Component // for singleton
 public class TestAll {
+    private final LoginManager loginManager;
+    private final AdminService adminService;
+    private final CompanyService companyService;
+    private final CustomerService customerService;
+    private final CouponExpirationDailyJob job;
+
+    public TestAll(CustomerService customerService, CompanyService companyService, AdminService adminService, LoginManager loginManager, CouponExpirationDailyJob job) {
+        this.job = job;
+        this.customerService = customerService;
+        this.companyService = companyService;
+        this.adminService = adminService;
+        this.loginManager = loginManager;
+    }
+
+    public void test() throws NotExistException, AlreadyExistException, OutOfStockException, ExpiredDateException {
+        Thread thread = new Thread(job);
+        try {
+            thread.start();
+
+//            Login manager - good
+            AdminService adminService1 = (AdminService) loginManager.login("admin@admin.com", "admin", ClientType.Administrator);
+            System.out.println(adminService1.getOneCustomer(1));
+
+            CompanyService companyService1 = (CompanyService) loginManager.login("non@nonn4", "2222", ClientType.Company);
+            System.out.println(companyService1.getCompanyDetails());
+
+            CustomerService customerService1 = (CustomerService) loginManager.login("ron@gmail.com", "1111", ClientType.Customer);
+            System.out.println(customerService1.getCustomerDetails());
+//       TODO: add documentation to the app(Java Docs).
+//       TODO: check if the login method in the service layer is redundant.
+//       TODO: fix purchaseCoupon(Need to save a customer with his updated list of coupons) and login methods in customerService
+//       TODO: try do convert the Service layer to design pattern "builder" and you will can connect only to method login and he will return the rest of class methods
+//       TODO: print conditions with ternary  and lambda and double lambda!
+//       TODO: use in the value return of function to do there conditions like: return isWeekend && isMorning;
+//       TODO: CustomerService.purchaseCoupons - do with stream().
+//       TODO: on service layer think about change the access to methods only after entered with login method by that he will return CustomerService/CompanyService and the rest of the methods will be privates
+//       TODO: in the end: delete redundant imports.
+//       TODO: check if when we delete customer its deleted his coupons and you can add cascade.REMOVE or the all types of the coupon he is holding, and also other customers will lose they coupons and you need to keep the cascade on PERSIST
+//       TODO: when you will finish with the project, sum all the "@ManyTo" to the notebook
 
 
+//      Admin service-
+//      //login- good
+            System.out.println(adminService.login("admin@admin.com", "admin"));
+
+//		//Add company - good
+            adminService.addCompany(new Company("non4", "non@nonn4", "2222"));
+
+//      //Get one Company - good
+            Company company2 = adminService.getOneCompany(1);
+
+//      //Update company - good
+            company2.setEmail("Google@gmail.com");
+            company2.setPassword("1234");
+            company2.setName("bbb");
+            adminService.updateCompany(company2);
+//      //Delete company - good
+            adminService.deleteCompany(2);
+//      //Get all companies - good
+            System.out.println(adminService.getAllCompanies());
+//      // Add customer - good
+            adminService.addCustomer(new Customer("ron", "cohen", "ron@gmail.com", "1111"));
+//      // update customer - good
+            Customer customer = adminService.getOneCustomer(2);
+            customer.setFirstName("avraham");
+            adminService.updateCustomer(customer);
+//      //Delete customer - good
+            adminService.deleteCustomer(2);
+//      //Get all customers - good
+            System.out.println(adminService.getAllCustomers());
+            //Get one customer - good
+            System.out.println(adminService.getOneCustomer(3));
+
+//      //Company service:
+//      login - good
+            System.out.println(companyService.login("non@nonn3", "123461"));
+//      //Add coupon - good
+            companyService.addCoupon(new Coupon(Category.SPA, "massage", "10 alloy as mental therapy", Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"), 25, 1500.0, null, adminService.getOneCompany(1)));
+//      //Update coupon- good
+            Coupon coupon = companyService.getCompanyCoupons().get(1);
+            coupon.setCategory(Category.CINEMA);
+            coupon.setCompany(adminService.getOneCompany(2));
+            companyService.updateCoupon(coupon);
+//      //Delete coupon - good
+            System.out.println(companyService.deleteCoupon(1));
+            //Get company coupons - good
+            companyService.login("non@nonn2", "1111");
+            System.out.println(companyService.getCompanyCoupons());
+//      //Get company coupon by category - good
+            companyService.login("non@nonn2", "1111");
+            System.out.println(companyService.getCompanyCoupons(Category.SPA));
+//      //Get company coupon by max price - good
+            companyService.login("non@nonn2", "1111");
+            System.out.println(companyService.getCompanyCoupons(1500));
+//      //Get company details - good
+            companyService.login("non@nonn2", "1111");
+            System.out.println(companyService.getCompanyDetails());
 
 
+//      //Customer service:
+//      //Login - good
+            System.out.println(customerService.login("ron@gmail.com", "1111"));
+
+//      //purchase coupon - good!!
+            System.out.println(customerService.login("ron@gmail.com", "1111"));
+            customerService.purchaseCoupon(companyService.getCompanyCoupons().get(1));
+
+            //Get customer coupons - good
+            System.out.println(customerService.login("ron@gmail.com", "1111"));
+            System.out.println(customerService.getCustomerCoupons());
+
+            //Get customer coupons by category - good
+            System.out.println(customerService.login("ron@gmail.com", "1111"));
+            System.out.println(customerService.getCustomerCoupons(Category.SPA));
+
+            //Get customer coupons by category - good
+            System.out.println(customerService.login("ron@gmail.com", "1111"));
+            System.out.println(customerService.getCustomerCoupons(1450));
+            System.out.println(customerService.getCustomerCoupons(1550));
+
+//      //Get customer details - good
+            System.out.println(customerService.login("ron@gmail.com", "1111"));
+            System.out.println(customerService.getCustomerDetails());
 
 
+//
+//
+        adminService.addCompany(new Company("non1", "non@nonn1", "1111"));
+        adminService.addCompany(new Company("non2", "non@nonn2", "2222"));
+        adminService.addCompany(new Company("non3", "non@nonn3", "3333"));
+        adminService.addCompany(new Company("non4", "non@nonn4", "4444"));
+        adminService.addCustomer(new Customer("ron1", "cohen", "ron@gmail.com1", "1111"));
+        adminService.addCustomer(new Customer("ron2", "cohen", "ron@gmail.com2", "1111"));
+        adminService.addCustomer(new Customer("ron3", "cohen", "ron@gmail.com3", "1111"));
+        adminService.addCustomer(new Customer("ron4", "cohen", "ron@gmail.com4", "1111"));
+        companyService.addCoupon(new Coupon(Category.SPA, "massage1", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+        companyService.addCoupon(new Coupon(Category.SPA, "massage2", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+        companyService.addCoupon(new Coupon(Category.SPA, "massage3", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+        companyService.addCoupon(new Coupon(Category.SPA, "massage4", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+        companyService.addCoupon(new Coupon(Category.SPA, "massage5", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
+        companyService.addCoupon(new Coupon(Category.SPA, "massage6", "10 alloy as mental therapy", java.sql.Date.valueOf("2020-09-01"), Date.valueOf("2026-09-01"),25, 1500.0,null, adminService.getOneCompany(1)));
 
+            thread.interrupt();
 
-
-    //singleton like connection pool, need to test the all app יש לבצע בדיקה כללית לכל המערכת ע"י יצירת מחלקה בשם Test המוגדרת גם היא כ-
-    //Singleton ובה מתודה המבצעת "תצוגת תכלית" )הצגה ובדיקה של כל המערכת(. יש לבצע
-    //Autowired @של רכיבי המערכת הרלוונטיים, לדוגמה LoginManager. בנוסף, יש להפעיל את
-    //המתודה המבצעת את "תצוגת התכלית" מ-()main.SpringBootApplication כך שהרצת
-    //הפרויקט תפעיל בצורה אוטומטית את הקוד במחלקת ה-Test
-
+        } catch (
+                RuntimeException e) { // prevent where we get exceptions in the middle of the proses to continue with "job" forever.
+            thread.interrupt();
+        }
+    }
 }

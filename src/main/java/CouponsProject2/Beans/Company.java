@@ -2,9 +2,6 @@ package CouponsProject2.Beans;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "company")
 public class Company {
@@ -16,11 +13,6 @@ public class Company {
     @Column(unique = true)
     private String email;
     private String password;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "company")// mappedBy need to be the name of the variable that do the connection(Company -> company <- ) in the connected table (coupon),
-    private List<Coupon> coupons;
-
-    public Company() { // Empty constructor replacing the annotation @Autowired for the variables of the class
-    }
 
     public Company(String name, String email, String password) {
         this.name = name;
@@ -28,12 +20,9 @@ public class Company {
         this.password = password;
     }
 
-    public Company(String name, String email, String password, List<Coupon> coupons) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.coupons = coupons;
+    public Company() { // Empty constructor replacing the annotation @Autowired for the variables of the class
     }
+
 
     public int getId() {
         return id;
@@ -61,14 +50,6 @@ public class Company {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<Coupon> getCoupons() {
-        return coupons;
-    }
-
-    public void setCoupons(List<Coupon> coupons) {
-        this.coupons = coupons;
     }
 
     @Override

@@ -9,6 +9,7 @@ import CouponsProject2.Repositories.CouponRepository;
 import CouponsProject2.Utils.Category;
 import CouponsProject2.Utils.ClientService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -34,23 +35,19 @@ public class CompanyService implements ClientService {
     }
 
     /**
-     *
      * @throws AlreadyExistException if the title of the coupon already exist in other coupon of !!!this!!! company
      */
     public void addCoupon(Coupon coupon) throws AlreadyExistException, NotExistException {
-        Company company = companyRepository.findById(coupon.getCompany().getId())
-                .orElseThrow(()->new NotExistException("We could not find the company of this coupon"));
         // check if there is existing coupon with this title, return true if exists.
-        boolean couponExists = company.getCoupons().stream()
+        boolean couponExists = couponRepository.findCouponsByCompanyId(coupon.getCompany().getId()).stream()
                 .anyMatch(existingCoupons -> existingCoupons.getTitle().equals(coupon.getTitle()));
 
-        if(couponExists)
+        if (couponExists)
             throw new AlreadyExistException("The coupon title already exist");
         couponRepository.save(coupon);
     }
 
     /**
-     *
      * @param updatingCoupon gets Coupon with exist ID, cant updated ID or companyId
      * @throws NotExistException if there is no such coupon by ID.
      */
@@ -60,9 +57,15 @@ public class CompanyService implements ClientService {
         couponRepository.save(updatingCoupon);
     }
 
-    public boolean deleteCoupon(int couponId) { // not working!!!!!!!!!!!!!!!!!!!!!!!
-        if (couponRepository.existsById(couponId)){
+    @Transactional // for telling Spring: this method is from INSERT/UPDATE/DELETE
+    public boolean deleteCoupon(int couponId) {
+        if (couponRepository.existsById(couponId)) {
+            System.out.println("1");
+            couponRepository.deletePurchasedCoupons(couponId);
+            System.out.println("2");
             couponRepository.deleteById(couponId);
+            System.out.println("3");
+
             return true;
         }
         return false;
@@ -80,7 +83,7 @@ public class CompanyService implements ClientService {
         return new ArrayList<>(couponRepository.findCouponsByCompanyIdAndPriceLessThan(companyId, maxPrice));
     }
 
-    public Company getCompanyDetails(){
+    public Company getCompanyDetails() {
         return companyRepository.findById(companyId).orElseThrow();
     }
 }

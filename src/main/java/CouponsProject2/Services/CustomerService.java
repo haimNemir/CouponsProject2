@@ -67,19 +67,15 @@ public class CustomerService implements ClientService {
 
     public ArrayList<Coupon> getCustomerCoupons(Category category) {
         Customer connectedCustomer = customerRepository.findById(customerId).orElseThrow();
-        return new ArrayList<>(connectedCustomer.getCoupons().stream().filter((coupon)-> coupon.getCategory() == category).toList());
+        return new ArrayList<>(connectedCustomer.getCoupons().stream().filter((coupon) -> coupon.getCategory() == category).toList());
     }
 
     public ArrayList<Coupon> getCustomerCoupons(double maxPrice) {
         Customer connectedCustomer = customerRepository.findById(customerId).orElseThrow();
-        return new ArrayList<>(connectedCustomer.getCoupons().stream().filter((coupon)-> coupon.getPrice() <= maxPrice).toList());
+        return new ArrayList<>(connectedCustomer.getCoupons().stream().filter((coupon) -> coupon.getPrice() <= maxPrice).toList());
     }
 
-    public Customer getCustomerDetails(){
+    public Customer getCustomerDetails() {
         return customerRepository.findById(customerId).orElseThrow();
     }
-
-
-
-
 }

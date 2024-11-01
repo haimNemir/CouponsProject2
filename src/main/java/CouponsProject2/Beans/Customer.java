@@ -1,6 +1,6 @@
 package CouponsProject2.Beans;
 import jakarta.persistence.*;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -11,12 +11,15 @@ public class Customer {
     private int id;
     private String firstName;
     private String lastName;
-    @Column(unique = true)
     private String email;
     private String password;
-    @Column(unique = true)// for prevent from customer purchase two coupons from same type, cant do it in another way because we don't have control on the logic in table customers_coupons
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private Set<Coupon> coupons = new HashSet<>();
+    @JoinTable(
+            name = "customer_coupon", // שם טבלת הקשרים
+            joinColumns = @JoinColumn(name = "customer_id"), // העמודה שתתייחס ללקוח
+            inverseJoinColumns = @JoinColumn(name = "coupon_id") // העמודה שתתייחס לקופון
+    )
+    @ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private Set<Coupon> coupons;
 
     public Customer() {
     }

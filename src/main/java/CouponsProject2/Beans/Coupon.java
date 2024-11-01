@@ -2,7 +2,6 @@ package CouponsProject2.Beans;
 import CouponsProject2.Utils.Category;
 import jakarta.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,11 +20,25 @@ public class Coupon {
     private double price;
     private String image;
     @JoinColumn(name = "company_id")// change the name of the column that connected between two tables, in phase 1 it was named like this too.
-    @ManyToOne(fetch = FetchType.EAGER)// its not make sense to add cascade.REMOVE here because we dont want when we delete coupon to delete with it the company
+    @ManyToOne(fetch = FetchType.EAGER)// it's not make sense to add cascade.REMOVE here because we don't want when we delete coupon to delete with it the company
     private Company company;
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "coupons")
-    private final Set<Customer> customers = new HashSet<>();
 
+
+    @ManyToMany(mappedBy = "coupons", fetch = FetchType.EAGER)
+    private Set<Customer> customers;
+
+    public Coupon(Category category, String title, String description, Date startDate, Date endDate, int amount, double price, String image, Company company, Set<Customer> customers) {
+        this.category = category;
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.amount = amount;
+        this.price = price;
+        this.image = image;
+        this.company = company;
+        this.customers = customers;
+    }
 
     public Coupon() {
     }
@@ -118,6 +131,14 @@ public class Coupon {
         this.category = category;
     }
 
+    public Set<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(Set<Customer> customers) {
+        this.customers = customers;
+    }
+
     @Override
     public String toString() {
         return "Coupon{" +
@@ -130,7 +151,7 @@ public class Coupon {
                 ", amount=" + amount +
                 ", price=" + price +
                 ", image='" + image + '\'' +
-                ", company name= " + company.getName() +
+                ", company=" + company +
                 '}';
     }
 }

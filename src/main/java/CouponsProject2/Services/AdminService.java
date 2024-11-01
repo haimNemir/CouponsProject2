@@ -1,5 +1,7 @@
 package CouponsProject2.Services;
+
 import CouponsProject2.Beans.Company;
+import CouponsProject2.Beans.Coupon;
 import CouponsProject2.Beans.Customer;
 import CouponsProject2.Exceptions.AlreadyExistException;
 import CouponsProject2.Exceptions.NotExistException;
@@ -8,6 +10,7 @@ import CouponsProject2.Repositories.CouponRepository;
 import CouponsProject2.Repositories.CustomerRepository;
 import CouponsProject2.Utils.ClientService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -17,13 +20,11 @@ public class AdminService implements ClientService {
     private final CompanyRepository companyRepository;
     private final CustomerRepository customerRepository;
     private final CouponRepository couponRepository;
-    private final CompanyService companyService;
 
-    public AdminService(CompanyRepository companyRepository, CustomerRepository customerRepository, CouponRepository couponRepository, CompanyService companyService) {
+    public AdminService(CompanyRepository companyRepository, CustomerRepository customerRepository, CouponRepository couponRepository) {
         this.companyRepository = companyRepository;
         this.customerRepository = customerRepository;
         this.couponRepository = couponRepository;
-        this.companyService = companyService;
     }
 
     public boolean login(String email, String password) throws NotExistException {
@@ -55,13 +56,15 @@ public class AdminService implements ClientService {
         companyRepository.save(company);
     }
 
-    public boolean deleteCompany(int companyId) throws NotExistException {
-        if (companyRepository.existsById(companyId)) {
-            companyService.getCompanyCoupons();
-            companyRepository.deleteById(companyId);
-            return true;
+    @Transactional // for telling Spring: this method is from INSERT/UPDATE/DELETE
+    public void deleteCompany(int companyId) {
+        ArrayList<Coupon> companyCoupon = (ArrayList<Coupon>) couponRepository.findCouponsByCompanyId(companyId);
+        for (Coupon coupon : companyCoupon) {
+            System.out.println(coupon);
+            couponRepository.deletePurchasedCoupons(coupon.getId());
+            couponRepository.deleteById(coupon.getId());
         }
-        throw new NotExistException("This company does not exist");
+        companyRepository.deleteById(companyId);
     }
 
     public ArrayList<Company> getAllCompanies() throws NotExistException {
@@ -85,15 +88,15 @@ public class AdminService implements ClientService {
     }
 
     public void updateCustomer(Customer customer) throws NotExistException {
-        if (customerRepository.existsById(customer.getId())){
-            customerRepository.save(customer);}
-        else throw new NotExistException("the customer does not exist");
+        if (customerRepository.existsById(customer.getId())) {
+            customerRepository.save(customer);
+        } else throw new NotExistException("the customer does not exist");
     }
 
-    public boolean deleteCustomer(int customerId) throws NotExistException {
+    public void deleteCustomer(int customerId) throws NotExistException {
         if (customerRepository.existsById(customerId)) {
             customerRepository.deleteById(customerId);
-            return true;
+            return;
         }
         throw new NotExistException("This customer does not exist");
     }
@@ -108,7 +111,4 @@ public class AdminService implements ClientService {
             return (ArrayList<Customer>) customerRepository.findAll();
         else throw new NotExistException("There are no customers yet");
     }
-
-
-
 }
