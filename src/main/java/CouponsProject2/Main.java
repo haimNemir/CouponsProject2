@@ -14,8 +14,10 @@ public class Main {
         TestAll testAll = context.getBean(TestAll.class);
         try {
              testAll.test();
-        } catch (NotExistException | AlreadyExistException | RuntimeException | OutOfStockException | ExpiredDateException e) {
+        } catch (NotExistException | AlreadyExistException |  OutOfStockException | ExpiredDateException | RuntimeException e) {
+            testAll.getCurrentThread().interrupt(); // prevent where we get exceptions in the middle of the proses to continue with "job" forever.
             throw new RuntimeException(e.getMessage());
         }
+
     }
 }
